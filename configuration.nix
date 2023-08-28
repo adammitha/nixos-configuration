@@ -164,7 +164,10 @@
     openssh.enable = true;
     tailscale.enable = true;
     locate.enable = true;
-    sysstat.enable = true;
+    sysstat = {
+      enable = true;
+      collect-args = "1 1 -S XALL";
+    };
   };
 
   # Open ports in the firewall.
