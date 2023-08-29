@@ -16,12 +16,17 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
+    supportedFilesystems = [ "zfs" ];
+    zfs = {
+      forceImportRoot = false;
+    };
   };
 
   # Networking
   networking = {
     hostName = "adams-nixos-desktop";
     networkmanager.enable = true;
+    hostId = "161f8e1d";
   };
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -143,10 +148,12 @@
     plocate
     htop
     btop
+    smartmontools
     sysstat
-    linux-manual
-    man-pages
-    man-pages-posix
+    # linux-manual
+    # man-pages
+    # man-pages-posix
+    zfs
   ];
 
   environment.shells = with pkgs; [ fish ];
@@ -164,9 +171,13 @@
     openssh.enable = true;
     tailscale.enable = true;
     locate.enable = true;
+    smartd.enable = true;
     sysstat = {
       enable = true;
       collect-args = "1 1 -S XALL";
+    };
+    zfs = {
+      autoScrub.enable = true;
     };
   };
 
@@ -204,8 +215,7 @@
 
   virtualisation.docker.enable = true;
 
-  documentation = {
-    dev.enable = true;
-    man.generateCaches = true;
-  };
+  # documentation = {
+  #   dev.enable = true;
+  # };
 }
