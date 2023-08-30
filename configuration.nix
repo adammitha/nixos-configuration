@@ -222,6 +222,7 @@
     autoUpgrade = {
       enable = true;
       allowReboot = true;
+      flake = "/home/adam/src/nixos-configuration/flake.nix";
     };
   };
 
@@ -229,12 +230,12 @@
     gc = {
       automatic = true;
       dates = "04:00";
-      options = "--delete-older-than 1w";
+      options = "--delete-older-than 7d";
     };
     settings = {
-      auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
     };
+    optimise.automatic = true;
   };
 
   virtualisation.docker.enable = true;
