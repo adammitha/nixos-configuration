@@ -128,32 +128,56 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    # editors
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+
+    # archives
+    zip
+    unzip
+    xz
+    zstd
+
+    # networking
+    aria2 # Download utility
+    dnsutils
+    socat
     wget
+
+    # better coreutils
+    bat
+    du-dust
+    fd
+    file
+    jq
+    plocate
+    ripgrep
+
+    # dev tools
     tmux
     git
     fzf
-    ripgrep
-    du-dust
-    neofetch
-    file
     alacritty
-    google-chrome
-    lsof
-    starship
     gh
-    bat
-    jq
-    fd
-    plocate
-    htop
+    starship
+
+    # monitoring
     btop
+    htop
+    lsof
+    neofetch
     smartmontools
     sysstat
+
+    # Storage
+    zfs
+
+    # GUI
+    google-chrome
+
+    # Documentation (disabled because of prohibitive man-cache rebuild times
     # linux-manual
     # man-pages
     # man-pages-posix
-    zfs
   ];
 
   environment.shells = with pkgs; [ fish ];
