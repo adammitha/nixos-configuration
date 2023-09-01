@@ -174,6 +174,9 @@
     # GUI
     google-chrome
 
+    # Utilities
+    pciutils
+
     # Documentation (disabled because of prohibitive man-cache rebuild times
     # linux-manual
     # man-pages
