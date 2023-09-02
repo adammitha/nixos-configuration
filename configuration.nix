@@ -144,14 +144,16 @@
     socat
     wget
 
-    # better coreutils
+    # Utilities
     bat
     du-dust
     fd
     file
     jq
+    pciutils
     plocate
     ripgrep
+    tree
 
     # dev tools
     tmux
@@ -174,9 +176,6 @@
 
     # GUI
     google-chrome
-
-    # Utilities
-    pciutils
 
     # Documentation (disabled because of prohibitive man-cache rebuild times
     # linux-manual
