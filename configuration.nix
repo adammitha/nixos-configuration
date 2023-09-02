@@ -225,7 +225,7 @@
     autoUpgrade = {
       enable = true;
       allowReboot = true;
-      flake = "/home/adam/src/nixos-configuration/flake.nix";
+      flake = "/home/adam/src/nixos-configuration";
     };
   };
 
