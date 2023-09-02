@@ -19,6 +19,7 @@
     supportedFilesystems = [ "zfs" ];
     zfs = {
       forceImportRoot = false;
+      extraPools = [ "kitsilano" ];
     };
   };
 
