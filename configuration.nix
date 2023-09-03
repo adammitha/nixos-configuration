@@ -212,6 +212,18 @@
     tailscale.enable = true;
     locate.enable = true;
     smartd.enable = true;
+    samba = {
+      enable = true;
+      openFirewall = true;
+      shares = {
+        Videos = {
+	  comment = "Videos";
+	  path = "/mnt/media/Videos";
+	  "read only" = "no";
+	  "browsable" = "yes";
+	};
+      };
+    };
     sysstat = {
       enable = true;
       collect-args = "1 1 -S XALL";
