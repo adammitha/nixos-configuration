@@ -226,6 +226,7 @@
       enable = true;
       allowReboot = true;
       flake = "/home/adam/src/nixos-configuration";
+      flags = [ "--update-input" "nixpkgs" "--commit-lock-file" ];
     };
   };
 
