@@ -165,6 +165,7 @@
 
     # monitoring
     btop
+    config.boot.kernelPackages.perf
     htop
     lsof
     neofetch
