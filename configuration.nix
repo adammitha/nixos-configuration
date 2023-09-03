@@ -25,9 +25,9 @@
 
   # Networking
   networking = {
+    hostId = "161f8e1d";
     hostName = "adams-nixos-desktop";
     networkmanager.enable = true;
-    hostId = "161f8e1d";
   };
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -196,6 +196,18 @@
 
   # List services that you want to enable:
   services = {
+    avahi = {
+      enable = true;
+      nssmdns = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        domain = true;
+        hinfo = true;
+        userServices = true;
+        workstation = true;
+      };
+    };
     openssh.enable = true;
     tailscale.enable = true;
     locate.enable = true;
