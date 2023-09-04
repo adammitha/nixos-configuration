@@ -111,6 +111,10 @@
     ];
     shell = pkgs.fish;
   };
+  users.users.timemachine = {
+    isNormalUser = true;
+    description = "Time Machine";
+  };
   security.sudo.wheelNeedsPassword = false;
   programs.fish = {
     enable = true;
