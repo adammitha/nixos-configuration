@@ -194,6 +194,19 @@
   #   enableSSHSupport = true;
   # };
 
+  # System-wide program configuration
+  programs = {
+    git = {
+      enable = true;
+      config = {
+        user = {
+	  name = "NixOS System User";
+	  email = "adam.mitha@gmail.com";
+	};
+      };
+    };
+  };
+
   # List services that you want to enable:
   services = {
     avahi = {
