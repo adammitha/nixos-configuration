@@ -15,10 +15,14 @@ in
     inherit configHome;
     enable = true;
     configFile = {
-      "git/allowed_signers".text = ''
-      # Keys permitted to sign git commits
-      adam.mitha@gmail.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAB/AenixWNi2t7mPamUlXvq7jcVH3PaLHXo6OAYpc8d adam.mitha@gmail.com
-      '';
+      gruvbox = {
+        source = ./gruvbox.theme;
+	target = "fish/themes/gruvbox.theme";
+      };
+      allowed_signers = {
+        source = ./allowed_signers;
+	target = "git/allowed_signers";
+      };
     };
   };
 
