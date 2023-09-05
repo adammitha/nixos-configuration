@@ -51,8 +51,15 @@ in
       };
     };
     neovim = {
-      enable = true;
       defaultEditor = true;
+      enable = true;
+      extraPackages = [ pkgs.fzf ];
+      plugins = with pkgs.vimPlugins; [
+        {
+	  plugin = fzf-vim;
+	  config = "nnoremap <C-p> :Files<CR>";
+	}
+      ];
     };
     starship = {
       enable = true;
