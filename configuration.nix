@@ -120,13 +120,6 @@
     enable = true;
   };
 
-  # Home manager
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    users.adam = import ./home.nix;
-  };
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
