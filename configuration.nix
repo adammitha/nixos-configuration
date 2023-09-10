@@ -153,6 +153,7 @@
     du-dust
     fd
     file
+    hyperfine
     jq
     pciutils
     plocate
