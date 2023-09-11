@@ -63,6 +63,19 @@ in
 	  plugin = vim-oscyank;
 	  config = "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif";
 	}
+	{
+	  plugin = base16-vim;
+	  config =
+	  ''
+	  if !has('gui_running')
+	    set t_Co=256
+	  endif
+	  set background=dark
+	  let base16colorspace=256
+	  autocmd vimenter * ++nested colorscheme base16-gruvbox-dark-soft
+	  hi Normal ctermbg=NONE
+	  '';
+	}
       ];
     };
     starship = {
