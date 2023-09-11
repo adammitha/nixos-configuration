@@ -40,14 +40,14 @@ in
       extraConfig = {
         commit.gpgsign = true;
         gpg = {
-	  format = "ssh";
-	  ssh = {
-	    allowedSignersFile = "/home/adam/.config/git/allowed_signers";
-	  };
-	};
+          format = "ssh";
+          ssh = {
+            allowedSignersFile = "/home/adam/.config/git/allowed_signers";
+          };
+        };
         init.defaultBranch = "main";
-	pull.rebase = true;
-	user.signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAB/AenixWNi2t7mPamUlXvq7jcVH3PaLHXo6OAYpc8d adam.mitha@gmail.com";
+        pull.rebase = true;
+        user.signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAB/AenixWNi2t7mPamUlXvq7jcVH3PaLHXo6OAYpc8d adam.mitha@gmail.com";
       };
     };
     neovim = {
@@ -56,26 +56,39 @@ in
       extraPackages = [ pkgs.fzf ];
       plugins = with pkgs.vimPlugins; [
         {
-	  plugin = fzf-vim;
-	  config = "nnoremap <C-p> :Files<CR>";
-	}
-	{
-	  plugin = vim-oscyank;
-	  config = "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif";
-	}
-	{
-	  plugin = base16-vim;
-	  config =
-	  ''
-	  if !has('gui_running')
-	    set t_Co=256
-	  endif
-	  set background=dark
-	  let base16colorspace=256
-	  autocmd vimenter * ++nested colorscheme base16-gruvbox-dark-soft
-	  hi Normal ctermbg=NONE
-	  '';
-	}
+          plugin = fzf-vim;
+          config = "nnoremap <C-p> :Files<CR>";
+        }
+        {
+          plugin = vim-oscyank;
+          config = "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif";
+        }
+        {
+          plugin = base16-vim;
+          config =
+          ''
+          if !has('gui_running')
+            set t_Co=256
+          endif
+          set background=dark
+          let base16colorspace=256
+          autocmd vimenter * ++nested colorscheme base16-gruvbox-dark-soft
+          hi Normal ctermbg=NONE
+          '';
+        }
+        {
+          plugin = nerdtree;
+        }
+        {
+          plugin = lualine-nvim;
+          type = "lua";
+          config =
+          ''
+          require('lualine').setup {
+            options = { theme = 'gruvbox' }
+          }
+          '';
+        }
       ];
     };
     starship = {
@@ -83,12 +96,12 @@ in
       settings = {
         add_newline = false;
         hostname = {
-        	ssh_symbol = " 🌐";
+          ssh_symbol = " 🌐";
           format = "[$hostname$ssh_symbol]($style)in ";
         };
-	nix_shell = {
-	  heuristic = true;
-	};
+        nix_shell = {
+          heuristic = true;
+        };
         username = {
           format = "[$user]($style) @ ";
         };
