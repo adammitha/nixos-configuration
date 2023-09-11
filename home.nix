@@ -59,6 +59,10 @@ in
 	  plugin = fzf-vim;
 	  config = "nnoremap <C-p> :Files<CR>";
 	}
+	{
+	  plugin = vim-oscyank;
+	  config = "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif";
+	}
       ];
     };
     starship = {
@@ -115,6 +119,9 @@ in
       # Fix titlebar
       set -g set-titles on
       set -g set-titles-string "#T"
+
+      # Enable OSCYank
+      set -s set-clipboard on
       '';
       historyLimit = 100000;
       keyMode = "vi";
