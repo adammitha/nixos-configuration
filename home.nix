@@ -51,6 +51,9 @@ in
       };
     };
     neovim = {
+      coc = {
+        enable = true;
+      };
       defaultEditor = true;
       enable = true;
       extraPackages = [ pkgs.fzf ];
