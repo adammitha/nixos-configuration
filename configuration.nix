@@ -325,4 +325,10 @@
   # documentation = {
   #   dev.enable = true;
   # };
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.adam = import ./home.nix;
+  };
 }
