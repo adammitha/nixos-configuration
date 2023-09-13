@@ -329,6 +329,6 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.adam = import ./home.nix;
+    users.adam = import ./home;
   };
 }
