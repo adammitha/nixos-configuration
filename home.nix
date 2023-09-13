@@ -153,7 +153,6 @@ in
       set -s set-clipboard on
       '';
       historyLimit = 100000;
-      keyMode = "vi";
       mouse = true;
       terminal = "xterm-256color";
     };
