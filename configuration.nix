@@ -17,6 +17,7 @@
       efi.canTouchEfiVariables = true;
     };
     supportedFilesystems = [ "zfs" ];
+    swraid.enable = false;
     zfs = {
       forceImportRoot = false;
       extraPools = [ "kitsilano" ];
