@@ -177,10 +177,10 @@
     # GUI
     google-chrome
 
-    # Documentation (disabled because of prohibitive man-cache rebuild times
-    # linux-manual
-    # man-pages
-    # man-pages-posix
+    # Documentation
+    linux-manual
+    man-pages
+    man-pages-posix
   ];
 
   environment.shells = with pkgs; [ fish ];
@@ -323,9 +323,10 @@
 
   virtualisation.docker.enable = true;
 
-  # documentation = {
-  #   dev.enable = true;
-  # };
+  documentation = {
+    dev.enable = true;
+    man.generateCaches = false;
+  };
 
   home-manager = {
     useGlobalPkgs = true;
