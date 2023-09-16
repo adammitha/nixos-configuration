@@ -42,6 +42,9 @@
         plugin = vim-oscyank;
         config = "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif";
       }
+      {
+        plugin = vim-sleuth;
+      }
     ];
   };
 }
