@@ -9,14 +9,6 @@
     extraPackages = [ pkgs.fzf ];
     plugins = with pkgs.vimPlugins; [
       {
-        plugin = fzf-vim;
-        config = "nnoremap <C-p> :Files<CR>";
-      }
-      {
-        plugin = vim-oscyank;
-        config = "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif";
-      }
-      {
         plugin = base16-vim;
         config =
         ''
@@ -30,7 +22,8 @@
         '';
       }
       {
-        plugin = nerdtree;
+        plugin = fzf-vim;
+        config = "nnoremap <C-p> :Files<CR>";
       }
       {
         plugin = lualine-nvim;
@@ -41,6 +34,13 @@
           options = { theme = 'gruvbox' }
         }
         '';
+      }
+      {
+        plugin = nerdtree;
+      }
+      {
+        plugin = vim-oscyank;
+        config = "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif";
       }
     ];
   };
