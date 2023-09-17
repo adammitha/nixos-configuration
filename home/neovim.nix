@@ -63,6 +63,9 @@
     '';
     extraPackages = [ pkgs.fzf ];
     plugins = with pkgs.vimPlugins; [
+      coc-rust-analyzer
+      nerdtree
+      vim-sleuth
       {
         plugin = base16-vim;
         config =
@@ -103,14 +106,8 @@
         '';
       }
       {
-        plugin = nerdtree;
-      }
-      {
         plugin = vim-oscyank;
         config = "autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif";
-      }
-      {
-        plugin = vim-sleuth;
       }
     ];
   };
