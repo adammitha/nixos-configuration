@@ -15,6 +15,10 @@
         if !has('gui_running')
           set t_Co=256
         endif
+        if (match($TERM, "-256color") != -1) && (match($TERM, "screen-256color") == -1)
+          " screen does not (yet) support truecolor
+          set termguicolors
+        endif
         set background=dark
         let base16colorspace=256
         autocmd vimenter * ++nested colorscheme base16-gruvbox-dark-soft
@@ -31,7 +35,15 @@
         config =
         ''
         require('lualine').setup {
-          options = { theme = 'gruvbox' }
+          options = { theme = 'gruvbox' },
+          sections = {
+            lualine_c = {
+              {
+                'filename',
+                path = 1
+              }
+            }
+          }
         }
         '';
       }
