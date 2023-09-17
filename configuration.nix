@@ -155,12 +155,12 @@
     tree
 
     # dev tools
-    tmux
-    git
-    fzf
     alacritty
+    fzf
+    git
     gh
     starship
+    tmux
 
     # monitoring
     btop
