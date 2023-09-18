@@ -13,6 +13,9 @@
   home = {
     username = "adam";
     homeDirectory = "/home/adam";
+    sessionVariables = {
+      FZF_DEFAULT_COMMAND = "fd --type f";
+    };
     stateVersion = "23.05";
   };
 }
