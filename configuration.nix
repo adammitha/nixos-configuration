@@ -159,6 +159,7 @@
     fzf
     git
     gh
+    nixd
     starship
     tmux
 

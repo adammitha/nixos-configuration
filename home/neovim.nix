@@ -25,7 +25,6 @@
       luasnip
       nerdtree
       nvim-cmp
-      nvim-lspconfig
       vim-sleuth
       {
         plugin = base16-vim;
@@ -80,6 +79,14 @@
             }
           }
         }
+        '';
+      }
+      {
+        plugin = nvim-lspconfig;
+        type = "lua";
+        config =
+        ''
+        require'lspconfig'.nixd.setup{}
         '';
       }
       {
