@@ -285,10 +285,10 @@
     };
     zfs = {
       autoScrub.enable = true;
-      autoSnapshot = {
-        enable = true;
-        flags = "-k -p --utc";
-      };
+      # autoSnapshot = {
+      #   enable = true;
+      #   flags = "-k -p --utc";
+      # };
     };
   };
 
