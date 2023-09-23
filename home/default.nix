@@ -2,6 +2,7 @@
 {
   imports = [
     ./direnv.nix
+    ./eza.nix
     ./fish.nix
     ./git.nix
     ./neovim.nix
