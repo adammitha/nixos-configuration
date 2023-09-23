@@ -21,7 +21,10 @@
     '';
     extraPackages = [ pkgs.fzf ];
     plugins = with pkgs.vimPlugins; [
+      cmp-nvim-lsp
+      luasnip
       nerdtree
+      nvim-cmp
       nvim-lspconfig
       vim-sleuth
       {
@@ -46,6 +49,22 @@
         config = "nnoremap <C-p> :Files<CR>";
       }
       {
+        plugin = lsp-zero-nvim;
+        type = "lua";
+        config =
+        ''
+        local lsp_zero = require('lsp-zero')
+
+        lsp_zero.preset('recommended')
+
+        lsp_zero.on_attach(function(client, bufnr)
+          lsp_zero.default_keymaps({buffer = bufnr})
+        end)
+
+        lsp_zero.setup()
+        '';
+      }
+      {
         plugin = lualine-nvim;
         type = "lua";
         config =
@@ -68,19 +87,16 @@
         type = "lua";
         config =
         ''
-        local rt = require("rust-tools")
+        local rust_tools = require('rust-tools')
 
-        rt.setup({
+        rust_tools.setup({
           server = {
-            on_attach = function(_, bufnr)
-              -- Hover actions
-              vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-              -- Code action groups
-              vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-            end,
-          },
+            on_attach = function(client, bufnr)
+              vim.keymap.set('n', '<leader>ca', rust_tools.hover_actions.hover_actions, {buffer = bufnr})
+            end
+          }
         })
-        rt.inlay_hints.enable()
+        rust_tools.inlay_hints.enable()
         '';
       }
       {
