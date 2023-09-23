@@ -1,48 +1,6 @@
 { config, pkgs, ...}:
 {
   programs.neovim = {
-    coc = {
-      enable = true;
-      pluginConfig =
-      ''
-      set tagfunc=CocTagFunc
-
-      " Coc shortcuts
-      nmap <silent> gd <Plug>(coc-definition)
-      nmap <silent> gy <Plug>(coc-type-definition)
-      nmap <silent> gi <Plug>(coc-implementation)
-      nmap <silent> gr <Plug>(coc-references)
-      nmap <silent> rn <Plug>(coc-rename)
-      nmap <silent> <C-h> :CocCommand clangd.switchSourceHeader<CR>
-      inoremap <silent><expr> <TAB>
-            \ coc#pum#visible() ? coc#pum#next(1) :
-            \ CheckBackspace() ? "\<Tab>" :
-            \ coc#refresh()
-      inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-      nmap <leader>ac <Plug>(coc-codeaction)
-      nmap <C-f> :CocCommand editor.action.formatDocument<CR>
-
-      let g:coc_filetype_map = {
-            \ 'tf': 'terraform'
-            \ }
-
-      function! CheckBackspace() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1]  =~# '\s'
-      endfunction
-
-      " Use K to show documentation in preview window.
-      nnoremap <silent> <leader>K :call ShowDocumentation()<CR>
-
-      function! ShowDocumentation()
-        if CocAction('hasProvider', 'hover')
-          call CocActionAsync('doHover')
-        else
-          call feedkeys('K', 'in')
-        endif
-      endfunction
-      '';
-    };
     defaultEditor = true;
     enable = true;
     extraConfig =
@@ -63,8 +21,8 @@
     '';
     extraPackages = [ pkgs.fzf ];
     plugins = with pkgs.vimPlugins; [
-      coc-rust-analyzer
       nerdtree
+      nvim-lspconfig
       vim-sleuth
       {
         plugin = base16-vim;
@@ -103,6 +61,26 @@
             }
           }
         }
+        '';
+      }
+      {
+        plugin = rust-tools-nvim;
+        type = "lua";
+        config =
+        ''
+        local rt = require("rust-tools")
+
+        rt.setup({
+          server = {
+            on_attach = function(_, bufnr)
+              -- Hover actions
+              vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+              -- Code action groups
+              vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+            end,
+          },
+        })
+        rt.inlay_hints.enable()
         '';
       }
       {
