@@ -2,6 +2,7 @@
 {
   imports = [
     ./plugins.nix
+    ./lsp.nix
   ];
   programs.neovim = {
     defaultEditor = true;
