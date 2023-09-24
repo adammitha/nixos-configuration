@@ -5,7 +5,7 @@
     ./eza.nix
     ./fish.nix
     ./git.nix
-    ./neovim.nix
+    ./neovim
     ./starship.nix
     ./tmux.nix
     ./xdg.nix
