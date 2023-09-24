@@ -87,6 +87,7 @@
         config =
         ''
         require'lspconfig'.nixd.setup{}
+        require'lspconfig'.gopls.setup{}
         '';
       }
       {
