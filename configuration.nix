@@ -245,6 +245,12 @@
       };
     };
     openssh.enable = true;
+    prometheus.exporters = {
+      node = {
+        enable = true;
+        openFirewall = true;
+      };
+    };
     tailscale.enable = true;
     locate.enable = true;
     smartd.enable = true;
