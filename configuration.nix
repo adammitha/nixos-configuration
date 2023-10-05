@@ -253,7 +253,11 @@
       };
     };
     tailscale.enable = true;
-    locate.enable = true;
+    locate = {
+      enable = true;
+      locate = pkgs.plocate;
+      localuser = null;
+    };
     smartd.enable = true;
     samba = {
       enable = true;
