@@ -255,7 +255,7 @@
     tailscale.enable = true;
     locate = {
       enable = true;
-      locate = pkgs.plocate;
+      package = pkgs.plocate;
       localuser = null;
     };
     smartd.enable = true;
