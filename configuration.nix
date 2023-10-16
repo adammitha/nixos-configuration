@@ -165,6 +165,8 @@
     tmux
 
     # monitoring
+    bcc
+    bpftrace
     btop
     config.boot.kernelPackages.perf
     htop
