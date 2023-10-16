@@ -3,7 +3,7 @@
 
   # Inputs
   # https://nixos.org/manual/nix/unstable/command-ref/new-cli/nix3-flake.html#flake-inputs
-  
+
   inputs = {
     # Official NixOS package source (unstable channel)
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -23,11 +23,12 @@
     nixosConfigurations = {
       "adams-nixos-desktop" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-	modules = [
-	  ./configuration.nix
-	  home-manager.nixosModules.home-manager
-	];
+        modules = [
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+        ];
       };
     };
+    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
   };
 }

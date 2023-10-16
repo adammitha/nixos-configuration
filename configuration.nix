@@ -6,7 +6,8 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
@@ -62,15 +63,15 @@
 
   # Disable autosuspend
   security.polkit.extraConfig = ''
-  polkit.addRule(function(action, subject) {
-      if (action.id == "org.freedesktop.login1.suspend" ||
-          action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
-          action.id == "org.freedesktop.login1.hibernate" ||
-          action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
-      {
-          return polkit.Result.NO;
-      }
-  });
+    polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.login1.suspend" ||
+            action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+            action.id == "org.freedesktop.login1.hibernate" ||
+            action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
+        {
+            return polkit.Result.NO;
+        }
+    });
   '';
 
   console.useXkbConfig = true;
@@ -108,7 +109,7 @@
     ];
     packages = with pkgs; [
       firefox
-    #  thunderbird
+      #  thunderbird
     ];
     shell = pkgs.fish;
   };
@@ -200,9 +201,9 @@
       enable = true;
       config = {
         user = {
-	  name = "NixOS System User";
-	  email = "adam.mitha@gmail.com";
-	};
+          name = "NixOS System User";
+          email = "adam.mitha@gmail.com";
+        };
       };
     };
   };
@@ -213,25 +214,25 @@
       enable = true;
       extraServiceFiles = {
         samba = ''
-        <?xml version="1.0" standalone='no'?>
-        <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-        <service-group>
-          <name replace-wildcards="yes">%h</name>
-          <service>
-            <type>_smb._tcp</type>
-            <port>445</port>
-          </service>
-          <service>
-            <type>_device-info._tcp</type>
-            <port>0</port>
-            <txt-record>model=TimeCapsule8,119</txt-record>
-          </service>
-          <service>
-            <type>_adisk._tcp</type>
-            <txt-record>dk0=adVN=timemachine,adVF=0x82</txt-record>
-            <txt-record>sys=waMa=0,adVF=0x100</txt-record>
-          </service>
-        </service-group>
+          <?xml version="1.0" standalone='no'?>
+          <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+          <service-group>
+            <name replace-wildcards="yes">%h</name>
+            <service>
+              <type>_smb._tcp</type>
+              <port>445</port>
+            </service>
+            <service>
+              <type>_device-info._tcp</type>
+              <port>0</port>
+              <txt-record>model=TimeCapsule8,119</txt-record>
+            </service>
+            <service>
+              <type>_adisk._tcp</type>
+              <txt-record>dk0=adVN=timemachine,adVF=0x82</txt-record>
+              <txt-record>sys=waMa=0,adVF=0x100</txt-record>
+            </service>
+          </service-group>
         '';
       };
       nssmdns = true;
@@ -262,32 +263,32 @@
     samba = {
       enable = true;
       extraConfig = ''
-        fruit:aapl = yes
-	fruit:nfs_aces = no
-	fruit:copyfile = no
-	fruit:model = MacSamba
-	multicast dns register = no
+                fruit:aapl = yes
+        	fruit:nfs_aces = no
+        	fruit:copyfile = no
+        	fruit:model = MacSamba
+        	multicast dns register = no
       '';
       openFirewall = true;
       shares = {
         Videos = {
-	  comment = "Videos";
-	  path = "/mnt/media/Videos";
-	  "read only" = "no";
-	  "browsable" = "yes";
-	};
-	timemachine = {
-	  "vfs objects" = "catia fruit streams_xattr";
-	  "fruit:time machine" = "yes";
-	  "fruit:time machine max size" = "600G";
-	  comment = "TimeMachine Backup";
-	  path = "/mnt/backups";
-	  available = "yes";
-	  "valid users" = "timemachine";
-	  "read only" = "no";
-	  "browsable" = "yes";
-	  "guest ok" = "no";
-	};
+          comment = "Videos";
+          path = "/mnt/media/Videos";
+          "read only" = "no";
+          "browsable" = "yes";
+        };
+        timemachine = {
+          "vfs objects" = "catia fruit streams_xattr";
+          "fruit:time machine" = "yes";
+          "fruit:time machine max size" = "600G";
+          comment = "TimeMachine Backup";
+          path = "/mnt/backups";
+          available = "yes";
+          "valid users" = "timemachine";
+          "read only" = "no";
+          "browsable" = "yes";
+          "guest ok" = "no";
+        };
       };
     };
     sysstat = {
