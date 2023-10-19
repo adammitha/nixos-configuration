@@ -162,6 +162,7 @@
     gh
     nixd
     starship
+    stgit
     tmux
 
     # monitoring
