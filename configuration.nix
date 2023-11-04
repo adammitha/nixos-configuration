@@ -168,6 +168,8 @@
 
     # dev tools
     alacritty
+    cscope
+    ctags
     fzf
     git
     gh
