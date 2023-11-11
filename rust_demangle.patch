@@ -1,0 +1,230 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 5024d24c..3aa90b2f 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -126,7 +126,7 @@ endif(STATIC_LINKING)
+ 
+ 
+ target_link_libraries(runtime ${LIBBPF_LIBRARIES} ${ZLIB_LIBRARIES})
+-target_link_libraries(libbpftrace parser resources runtime aot ast arch cxxdemangler_llvm)
++target_link_libraries(libbpftrace parser resources runtime aot ast arch cxxdemangler_llvm rustdemangler)
+ 
+ if(LIBPCAP_FOUND)
+   target_link_libraries(libbpftrace ${LIBPCAP_LIBRARIES})
+@@ -257,3 +257,4 @@ add_subdirectory(aot)
+ add_subdirectory(arch)
+ add_subdirectory(ast)
+ add_subdirectory(cxxdemangler)
++add_subdirectory(rustdemangler)
+diff --git a/src/aot/CMakeLists.txt b/src/aot/CMakeLists.txt
+index c776d204..eb742054 100644
+--- a/src/aot/CMakeLists.txt
++++ b/src/aot/CMakeLists.txt
+@@ -11,7 +11,7 @@ if(NOT LIBBCC_BPF_CONTAINS_RUNTIME)
+ endif()
+ 
+ add_executable(bpftrace-aotrt aot_main.cpp)
+-target_link_libraries(bpftrace-aotrt aot runtime arch ast_defs cxxdemangler_stdlib)
++target_link_libraries(bpftrace-aotrt aot runtime arch ast_defs cxxdemangler_stdlib rustdemangler)
+ install(TARGETS bpftrace-aotrt DESTINATION ${CMAKE_INSTALL_BINDIR})
+ 
+ if(LIBPCAP_FOUND)
+diff --git a/src/probe_matcher.cpp b/src/probe_matcher.cpp
+index 65246a79..c1d059f4 100644
+--- a/src/probe_matcher.cpp
++++ b/src/probe_matcher.cpp
+@@ -8,6 +8,7 @@
+ 
+ #include "bpftrace.h"
+ #include "cxxdemangler/cxxdemangler.h"
++#include "rustdemangler/rustdemangler.h"
+ #include "dwarf_parser.h"
+ #include "log.h"
+ #include "probe_matcher.h"
+@@ -20,6 +21,18 @@
+ 
+ namespace bpftrace {
+ 
++typedef char *(*demangler_func)(const char *);
++
++static demangler_func
++get_demangler(const std::string& lang)
++{
++  if (lang == "cpp")
++    return cxxdemangle;
++  else if (lang == "rust")
++    return rustdemangle;
++  return nullptr;
++}
++
+ static int add_symbol(const char* symname,
+                       uint64_t /*start*/,
+                       uint64_t /*size*/,
+@@ -41,7 +54,7 @@ std::set<std::string> ProbeMatcher::get_matches_in_stream(
+     const std::string& search_input,
+     std::istream& symbol_stream,
+     bool ignore_trailing_module,
+-    bool demangle_symbols,
++    const std::string& lang,
+     const char delim)
+ {
+   bool start_wildcard, end_wildcard;
+@@ -58,7 +71,7 @@ std::set<std::string> ProbeMatcher::get_matches_in_stream(
+ 
+     if (!wildcard_match(line, tokens, start_wildcard, end_wildcard))
+     {
+-      if (demangle_symbols)
++      if (!lang.empty())
+       {
+         auto fun_line = line;
+         auto prefix = fun_line.find(':') != std::string::npos
+@@ -66,7 +79,7 @@ std::set<std::string> ProbeMatcher::get_matches_in_stream(
+                           : "";
+         if (symbol_has_cpp_mangled_signature(fun_line))
+         {
+-          char* demangled_name = cxxdemangle(fun_line.c_str());
++          char* demangled_name = get_demangler(lang)(fun_line.c_str());
+           if (!demangled_name)
+             continue;
+ 
+@@ -116,7 +129,7 @@ std::set<std::string> ProbeMatcher::get_matches_for_probetype(
+     const ProbeType& probe_type,
+     const std::string& target,
+     const std::string& search_input,
+-    bool demangle_symbols)
++    const std::string& lang)
+ {
+   std::unique_ptr<std::istream> symbol_stream;
+   bool ignore_trailing_module = false;
+@@ -213,7 +226,7 @@ std::set<std::string> ProbeMatcher::get_matches_for_probetype(
+ 
+   if (symbol_stream)
+     return get_matches_in_stream(
+-        search_input, *symbol_stream, ignore_trailing_module, demangle_symbols);
++        search_input, *symbol_stream, ignore_trailing_module, lang);
+   else
+     return {};
+ }
+@@ -232,7 +245,7 @@ std::set<std::string> ProbeMatcher::get_matches_in_set(
+     stream_in.append(str + "$");
+ 
+   std::istringstream stream(stream_in);
+-  return get_matches_in_stream(search_input, stream, false, false, '$');
++  return get_matches_in_stream(search_input, stream, false, "", '$');
+ }
+ 
+ std::unique_ptr<std::istream> ProbeMatcher::get_symbols_from_file(
+@@ -533,10 +546,10 @@ void ProbeMatcher::list_probes(ast::Program* prog)
+       for (auto& match : matches)
+       {
+         std::string match_print = match;
+-        if (ap->lang == "cpp")
++        if (ap->lang == "cpp" || ap->lang == "rust")
+         {
+           std::string target = erase_prefix(match_print);
+-          char* demangled_name = cxxdemangle(match_print.c_str());
++          char* demangled_name = get_demangler(ap->lang)(match_print.c_str());
+ 
+           // demangled name may contain symbols not accepted by the attach point
+           // parser, so surround it with quotes to make the entry directly
+@@ -624,7 +637,7 @@ std::set<std::string> ProbeMatcher::get_matches_for_ap(
+   return get_matches_for_probetype(probetype(attach_point.provider),
+                                    attach_point.target,
+                                    search_input,
+-                                   attach_point.lang == "cpp");
++                                   attach_point.lang);
+ }
+ 
+ std::set<std::string> ProbeMatcher::expand_probetype_kernel(
+diff --git a/src/probe_matcher.h b/src/probe_matcher.h
+index 4367aba4..2bfa339f 100644
+--- a/src/probe_matcher.h
++++ b/src/probe_matcher.h
+@@ -88,13 +88,13 @@ private:
+       const std::string &search_input,
+       std::istream &symbol_stream,
+       bool ignore_trailing_module = false,
+-      bool demangle_symbols = true,
++      const std::string& lang = "",
+       const char delim = '\n');
+   std::set<std::string> get_matches_for_probetype(
+       const ProbeType &probe_type,
+       const std::string &target,
+       const std::string &search_input,
+-      bool demangle_symbols);
++      const std::string& lang);
+   std::set<std::string> get_matches_in_set(const std::string &search_input,
+                                            const std::set<std::string> &set);
+ 
+diff --git a/src/rustdemangler/CMakeLists.txt b/src/rustdemangler/CMakeLists.txt
+new file mode 100644
+index 00000000..eea89a7a
+--- /dev/null
++++ b/src/rustdemangler/CMakeLists.txt
+@@ -0,0 +1,7 @@
++add_library(rustdemangler rustdemangler.cpp)
++
++add_dependencies(rustdemangler parser)
++
++target_include_directories(rustdemangler PUBLIC ${CMAKE_SOURCE_DIR}/src)
++target_include_directories(rustdemangler  PUBLIC ${CMAKE_BINARY_DIR})
++target_link_libraries(rustdemangler "rustc_demangle")
+diff --git a/src/rustdemangler/rustdemangler.cpp b/src/rustdemangler/rustdemangler.cpp
+new file mode 100644
+index 00000000..0bb4bd4c
+--- /dev/null
++++ b/src/rustdemangler/rustdemangler.cpp
+@@ -0,0 +1,26 @@
++#include <cstddef>
++#include <cstring>
++#include <iostream>
++#include <rustc_demangle.h>
++
++#include "log.h"
++#include "rustdemangler.h"
++
++namespace bpftrace {
++
++char *rustdemangle(const char *mangled)
++{
++  if (!mangled)
++    return nullptr;
++
++  size_t len = strlen(mangled);
++
++  char *demangled = new char[len];
++  if (!rustc_demangle(mangled, demangled, len)) {
++    return nullptr;
++  }
++
++  return demangled;
++}
++
++} // namespace bpftrace
+diff --git a/src/rustdemangler/rustdemangler.h b/src/rustdemangler/rustdemangler.h
+new file mode 100644
+index 00000000..a47aad7c
+--- /dev/null
++++ b/src/rustdemangler/rustdemangler.h
+@@ -0,0 +1,8 @@
++#pragma once
++
++namespace bpftrace {
++// Demange a mangled Rust symbol anme
++//
++// Note: callee `free()`ed
++char *rustdemangle(const char *mangled);
++}
+diff --git a/src/utils.h b/src/utils.h
+index 7ce51154..1c1ee509 100644
+--- a/src/utils.h
++++ b/src/utils.h
+@@ -155,7 +155,7 @@ static std::vector<std::string> UNSAFE_BUILTIN_FUNCS = {
+ 
+ static std::vector<std::string> COMPILE_TIME_FUNCS = { "cgroupid" };
+ 
+-static std::vector<std::string> UPROBE_LANGS = { "cpp" };
++static std::vector<std::string> UPROBE_LANGS = { "cpp", "rust" };
+ 
+ bool get_uint64_env_var(const ::std::string &str, uint64_t &dest);
+ bool get_bool_env_var(const ::std::string &str, bool &dest, bool neg = false);
