@@ -163,6 +163,7 @@
     # Utilities
     bat
     du-dust
+    efibootmgr
     fd
     file
     hyperfine
