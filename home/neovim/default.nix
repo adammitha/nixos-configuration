@@ -24,5 +24,7 @@
         nnoremap <C-k> :tabnext<CR>
       '';
     extraPackages = [ pkgs.fzf ];
+    vimAlias = true;
+    vimdiffAlias = true;
   };
 }
