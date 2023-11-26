@@ -168,6 +168,7 @@
     file
     hyperfine
     jq
+    moreutils
     pciutils
     plocate
     ripgrep
