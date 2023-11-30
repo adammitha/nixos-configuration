@@ -194,6 +194,7 @@
     htop
     lsof
     neofetch
+    samply
     smartmontools
     sysstat
 
