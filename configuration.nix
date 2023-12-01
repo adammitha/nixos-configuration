@@ -190,6 +190,7 @@
     bcc
     bpftrace
     btop
+    cargo-flamegraph
     config.boot.kernelPackages.perf
     htop
     lsof
