@@ -188,6 +188,7 @@
 
     # monitoring
     bcc
+    bpftools
     bpftrace
     btop
     cargo-flamegraph
