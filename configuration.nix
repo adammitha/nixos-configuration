@@ -171,6 +171,7 @@
     moreutils
     pciutils
     plocate
+    rclone
     ripgrep
     tree
 
