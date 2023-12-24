@@ -278,6 +278,7 @@
       node = {
         enable = true;
         enabledCollectors = [ "systemd" "processes" ];
+        extraFlags = [ "--no-collector.arp.netlink" ];
         openFirewall = true;
       };
     };
