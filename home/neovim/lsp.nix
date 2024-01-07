@@ -3,7 +3,27 @@
   programs.neovim.plugins = with pkgs.vimPlugins; [
     cmp-nvim-lsp
     luasnip
-    nvim-cmp
+    {
+      plugin = nvim-cmp;
+      type = "lua";
+      config =
+      ''
+      local cmp = require('cmp')
+      local cmp_action = require('lsp-zero').cmp_action()
+
+      cmp.setup({
+        mapping = cmp.mapping.preset.insert({
+          ['<CR>'] = cmp.mapping.confirm({select = false}),
+          ['<Tab>'] = cmp_action.luasnip_supertab(),
+          ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
+        }),
+        preselect = 'item',
+        completion = {
+          completeopt = 'menu,menuone,noinsert'
+        },
+      })
+      '';
+    }
     {
       plugin = lsp-zero-nvim;
       type = "lua";
@@ -57,7 +77,7 @@
               vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
               vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
               vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-              vim.keymap.set('n', '<space>f', function()
+              vim.keymap.set('n', '<C-f>', function()
                 vim.lsp.buf.format { async = true }
               end, opts)
             end,
