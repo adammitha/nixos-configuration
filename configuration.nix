@@ -166,6 +166,7 @@
     efibootmgr
     fd
     file
+    hexyl
     hyperfine
     jq
     moreutils
