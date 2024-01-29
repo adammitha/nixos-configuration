@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 {
   imports = [
+    ./atuin.nix
     ./direnv.nix
     ./eza.nix
     ./fish.nix
