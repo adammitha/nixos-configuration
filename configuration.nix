@@ -46,12 +46,12 @@
           rm $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
         '';
       });
-      bpftrace = prev.bpftrace.overrideAttrs (oldAttrs: {
-        nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
-          prev.rustc-demangle
-        ];
-        patches = [ ./rust_demangle.patch ];
-      });
+      # bpftrace = prev.bpftrace.overrideAttrs (oldAttrs: {
+      #   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
+      #     prev.rustc-demangle
+      #   ];
+      #   patches = [ ./rust_demangle.patch ];
+      # });
     })
   ];
 
@@ -234,6 +234,9 @@
           email = "adam.mitha@gmail.com";
         };
       };
+    };
+    nix-ld = {
+      enable = true;
     };
   };
 
