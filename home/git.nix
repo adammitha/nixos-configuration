@@ -13,7 +13,10 @@
         };
       };
       init.defaultBranch = "main";
-      pull.rebase = true;
+      pull = {
+        autosetupremote = true;
+        rebase = true;
+      };
       user.signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAB/AenixWNi2t7mPamUlXvq7jcVH3PaLHXo6OAYpc8d adam.mitha@gmail.com";
     };
   };

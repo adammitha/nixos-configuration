@@ -73,9 +73,11 @@
       autoSuspend = false;
     };
     # Configure keymap in X11
-    layout = "us";
-    xkbVariant = "";
-    xkbOptions = "ctrl:swapcaps";
+    xkb = {
+      layout = "us";
+      options = "ctrl:swapcaps";
+      variant = "";
+    };
   };
 
   # Disable autosuspend
