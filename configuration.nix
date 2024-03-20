@@ -353,12 +353,12 @@
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     stateVersion = "23.05";
-    autoUpgrade = {
-      enable = true;
-      allowReboot = true;
-      flake = "/home/adam/src/nixos-configuration";
-      flags = [ "--update-input" "nixpkgs" "--update-input" "home-manager" ];
-    };
+    # autoUpgrade = {
+    #   enable = true;
+    #   allowReboot = true;
+    #   flake = "/home/adam/src/nixos-configuration";
+    #   flags = [ "--update-input" "nixpkgs" "--update-input" "home-manager" ];
+    # };
   };
 
   nix = {
