@@ -312,6 +312,12 @@
           "read only" = "no";
           "browsable" = "yes";
         };
+        photos = {
+          comment = "Photos";
+          path = "/mnt/photos";
+          "read only" = "no";
+          "browsable" = "yes";
+        };
         timemachine = {
           "vfs objects" = "catia fruit streams_xattr";
           "fruit:time machine" = "yes";
