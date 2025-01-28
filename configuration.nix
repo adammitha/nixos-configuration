@@ -99,8 +99,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -292,20 +291,18 @@
     locate = {
       enable = true;
       package = pkgs.plocate;
-      localuser = null;
     };
     smartd.enable = true;
     samba = {
       enable = true;
-      extraConfig = ''
-                fruit:aapl = yes
-        	fruit:nfs_aces = no
-        	fruit:copyfile = no
-        	fruit:model = MacSamba
-        	multicast dns register = no
-      '';
-      openFirewall = true;
-      shares = {
+      settings = { 
+        "global" = {
+          "fruit:aapl" = "yes";
+          "fruit:nfs_aces" = "no";
+          "fruit:copyfile" = "no";
+          "fruit:model" = "MacSamba";
+          "multicast dns register" = "no";
+        };
         Videos = {
           comment = "Videos";
           path = "/mnt/media/Videos";
@@ -331,6 +328,7 @@
           "guest ok" = "no";
         };
       };
+      openFirewall = true;
     };
     sysstat = {
       enable = true;
